@@ -1,13 +1,28 @@
 #include<DxLib.h>
+#include<vector>
+#include<string>
+#include<fstream>
+#include"SceneManager.h"
+#include"GameoverScene.h"
+#include"Utility.h"
 #include "Stage.h"
+
+Stage::Stage(GameScene* scene)
+{
+	mGameScene = scene;
+	//mSceneManager = scene->GetSceneManager();
+}
 
 void Stage::Init(int stageNo)
 {
 	LoadDivGraph("Image/StageChip.png", 4, 2, 2, 32, 32, mImage, true);
 
 
-	SetStage(stageNo);
+	//SetStage(stageNo);
 	
+	//外部データでステージ設定
+	LoadDate(stageNo);
+
 }
 
 void Stage::UpDate(void)
@@ -114,4 +129,44 @@ void Stage::SetStage(int stageNo)
 
 	
 
+}
+
+void Stage::LoadDate(int stageNo)
+{
+	//ファイルパス取得
+	std::string filePath = mGameScene->GetCsvPathGround(stageNo);
+
+	//ファイルを読み込む
+	std::ifstream ifs(filePath);
+
+	//1行ずつ読み込む
+	std::string line;
+	while (getline(ifs, line))
+	{
+		//Yで分割されたline
+		
+
+		std::vector<std::string>strvec =
+			Utility::Split(line, ',');
+
+
+		//Xで分割されたstrvec
+
+		int y = stoi(line);
+		for (int x = 0; x < MAP_SIZE_X; x++)
+		{
+			 x = stoi(strvec[x]);
+			mMap[y][x] = ;
+		}
+
+		int i = stoi(std::string("1"));
+
+
+
+
+
+
+	}
+
+	
 }

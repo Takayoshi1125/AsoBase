@@ -2,10 +2,14 @@
 #include"GameCommon.h"
 #include"Vector2.h"
 
+class GameScene;
+
 class Stage
 {
 public:
-	void Init(int stageno);
+	Stage(GameScene* scene);
+
+	void Init(int stageNo);
 	void UpDate(void);
 	void Render(void);
 	void Release(void);
@@ -14,6 +18,8 @@ public:
 	bool IsCollision(Vector2 mapPos);
 
 private:
+
+	GameScene* mGameScene;
 
 	int mImage[4];
 
@@ -45,6 +51,11 @@ private:
 		{0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0},
 	};
 
+	//これはプログラムコードでステージ設定
 	void SetStage(int stageNo);
+
+	//外部ファイルを使用してステージ設定
+	void LoadDate(int stageNo);
+
 };
 

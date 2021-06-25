@@ -1,4 +1,5 @@
 #include<vector>
+#include<string>
 #include <DxLib.h>
 #include"Fader.h"
 #include "KeyCheck.h"
@@ -7,7 +8,7 @@
 #include"Stage.h"
 #include"Unit.h"
 #include"Box.h"
-#include"Storage.h"
+#include"Storage.h"-
 #include "GameScene.h"
 
 GameScene::GameScene(SceneManager* manager) : SceneBase(manager)
@@ -28,7 +29,7 @@ void GameScene::Init(void)
 	mFader->SetFade(Fader::FADE_STATE::FADE_IN);
 	mIsFading = true;
 
-	mStage = new Stage();
+	mStage = new Stage(this);
 	mStage->Init(mStageNo);
 	
 
@@ -253,6 +254,18 @@ Storage* GameScene::GetCollisionStorage(Vector2 pos)
 	}
 
 	return ret;
+}
+
+std::string GameScene::GetCsvPathGround(int stageNo)
+{
+	std::string ret = "";
+
+	ret += FILE_PATH_CSV;
+	ret += std::to_string(stageNo);
+	ret += "/"; 
+	ret += FILE_NAME_GROUND;
+
+	return std::string();
 }
 
 void GameScene::ChangeState(void)

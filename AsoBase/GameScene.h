@@ -1,9 +1,9 @@
 #pragma once
-#include "GameCommon.h"
 #include<vector>
+#include<string>
+#include"GameCommon.h"
 #include"Vector2.h"
-
-#include "SceneBase.h"
+#include"SceneBase.h"
 class SceneManager;
 class Fader;
 class Stage;
@@ -40,10 +40,14 @@ public:
 	//荷物置き場との衝突判定
 	Storage* GetCollisionStorage(Vector2 pos);
 
+	Fader* mFader;
+
+	//ステージ構成パスを取得
+	std::string GetCsvPathGround(int stageNo);
+
 private:
 	Stage* mStage;
 	Unit* mUnit;
-	Fader* mFader;
 	
 	//デルタタイム
 	float mTickCount;
