@@ -1,5 +1,6 @@
 #include<vector>
 #include<string>
+#include<fstream>
 #include <DxLib.h>
 #include"Fader.h"
 #include "KeyCheck.h"
@@ -8,7 +9,8 @@
 #include"Stage.h"
 #include"Unit.h"
 #include"Box.h"
-#include"Storage.h"-
+#include"Storage.h"
+#include"Utility.h"
 #include "GameScene.h"
 
 GameScene::GameScene(SceneManager* manager) : SceneBase(manager)
@@ -33,7 +35,8 @@ void GameScene::Init(void)
 	mStage->Init(mStageNo);
 	
 
-	SetStage();
+	//SetStage();
+	LoadGimicData();
 
 }
 
@@ -265,7 +268,19 @@ std::string GameScene::GetCsvPathGround(int stageNo)
 	ret += "/"; 
 	ret += FILE_NAME_GROUND;
 
-	return std::string();
+	return ret;
+}
+
+std::string GameScene::GetCsvPathGimmick(int stageNo)
+{
+	std::string ret = "";
+
+	ret += FILE_PATH_CSV;
+	ret += std::to_string(stageNo);
+	ret += "/";
+	ret +=FILE_NAME_GIMMICK;
+
+	return ret;
 }
 
 void GameScene::ChangeState(void)
@@ -355,6 +370,80 @@ void GameScene::SetStage(void)
 	}
 
 	
+}
+
+void GameScene::LoadGimicData(void)
+{
+	//荷物
+	Box* tmpBox;
+
+	//荷物置き
+	Storage* tmpStorage;
+
+	//ファイルパス取得
+	std::string filePath = GetCsvPathGimmick(mStageNo);
+
+	//ファイルを読み込む
+	std::ifstream ifs(filePath);
+
+	//1行ずつ読み込む
+	int y = 0;
+	std::string line;
+	while (getline(ifs, line))
+	{
+		//Yで分割されたline
+
+
+		std::vector<std::string>strvec =
+			Utility::Split(line, ',');
+
+
+		//Xで分割されたstrvec
+		int size = strvec.size();
+		for (int x = 0; x < size; x++)
+		{
+			int chipID = stoi(strvec[x]);
+
+			switch (chipID)
+			{
+			case 4:
+				
+				//荷物
+
+				tmpBox = new Box(this);
+				tmpBox->Init(Vector2{ x,y });
+				mBoxes.push_back(tmpBox);
+				break;
+
+			case 5:
+				//荷物置き
+
+				tmpStorage = new Storage(this);
+				tmpStorage->Init(Vector2{ x,y });
+				mStorages.push_back(tmpStorage);
+					break;
+
+			case 6:
+				
+				//操作キャラ
+				mUnit = new Unit(this);
+				mUnit->Init(Vector2{ x,y });
+				break;
+			}
+
+
+
+			//mMap[y][x] = stoi(strvec[x]);
+		}
+
+		int i = stoi(strvec[0]);
+
+		y++;
+
+	}
+
+	if (true) {}
+
 }
 
 

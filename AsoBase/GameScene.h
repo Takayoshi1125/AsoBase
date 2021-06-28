@@ -45,6 +45,9 @@ public:
 	//ステージ構成パスを取得
 	std::string GetCsvPathGround(int stageNo);
 
+	std::string GetCsvPathGimmick(int stageNo);
+
+
 private:
 	Stage* mStage;
 	Unit* mUnit;
@@ -70,5 +73,7 @@ private:
 	void ChangeStage(void);
 
 	void SetStage(void);
+
+	void LoadGimicData(void);
 
 };

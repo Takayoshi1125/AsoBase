@@ -43,7 +43,7 @@ void Stage::Render(void)
 	{
 		for (int x = 0; x< MAP_SIZE_X; x++)
 		{
-			if (mMap[y][x] == 0)
+			if (mMap[y][x] == -1)
 			{
 				DrawGraph(x * BLOCK_SIZE + GAME_AREA_X,
 					y * BLOCK_SIZE + GAME_AREA_Y,
@@ -55,7 +55,7 @@ void Stage::Render(void)
 					y * BLOCK_SIZE + GAME_AREA_Y,
 					mImage[1], true);
 			}
-			else if (mMap[y][x] == 9)
+			else if (mMap[y][x] == 2)
 			{
 				DrawGraph(x * BLOCK_SIZE + GAME_AREA_X,
 					y * BLOCK_SIZE + GAME_AREA_Y,
@@ -140,6 +140,7 @@ void Stage::LoadDate(int stageNo)
 	std::ifstream ifs(filePath);
 
 	//1s‚¸‚Â“Ç‚Ýž‚Þ
+	int y = 0;
 	std::string line;
 	while (getline(ifs, line))
 	{
@@ -151,22 +152,18 @@ void Stage::LoadDate(int stageNo)
 
 
 		//X‚Å•ªŠ„‚³‚ê‚½strvec
-
-		int y = stoi(line);
-		for (int x = 0; x < MAP_SIZE_X; x++)
+		int size = strvec.size();
+		for (int x = 0; x < size; x++)
 		{
-			 x = stoi(strvec[x]);
-			mMap[y][x] = ;
+			mMap[y][x] = stoi(strvec[x]);
 		}
 
-		int i = stoi(std::string("1"));
+		int i = stoi(strvec[0]);
 
-
-
-
-
+		y++;
 
 	}
 
-	
+	if(true){}
+
 }
