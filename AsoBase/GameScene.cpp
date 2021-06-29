@@ -47,86 +47,56 @@ void GameScene::Init(void)
 /// <returns></returns>
 void GameScene::Update(void)
 {
+	
+
 	//ミリ秒
 	float tickCount = GetTickCount64();
 
 	mDeltTime = (tickCount - mTickCount) / 1000.0f;
 	mTickCount = tickCount;
 
-	mFader->Update();
-	if (mIsFading)
+	//mFader->Update();
+	//if (mIsFading)
+	//{
+	//	Fader::FADE_STATE fState = mFader->GetState();
+	//	switch (fState)
+	//	{
+	//	case Fader::FADE_STATE::FADE_IN:
+	//		if (mFader->IsEnd())
+	//		{
+	//			mFader->SetFade(Fader::FADE_STATE::NONE);
+	//			mIsFading = false;
+	//			//ChangeStage();
+	//		}
+	//		break;
+	//	case Fader::FADE_STATE::FADE_OUT:
+	//		if (mFader->IsEnd())
+	//		{
+	//			//mFader->SetFade(Fader::FADE_STATE::FADE_IN);
+	//			ChangeStage();
+	//		}
+	//		break;
+	//	default:
+	//		break;
+	//	}
+	//}
+	/*else
 	{
-		Fader::FADE_STATE fState = mFader->GetState();
-		switch (fState)
-		{
-		case Fader::FADE_STATE::FADE_IN:
-			if (mFader->IsEnd())
-			{
-				mFader->SetFade(Fader::FADE_STATE::NONE);
-				mIsFading = false;
-				//ChangeStage();
-			}
-			break;
-		case Fader::FADE_STATE::FADE_OUT:
-			if (mFader->IsEnd())
-			{
-				//mFader->SetFade(Fader::FADE_STATE::FADE_IN);
-				ChangeStage();
-			}
-			break;
-		default:
-			break;
-		}
-	}
-	else
+		
+	}*/
+
+	switch (mState)
 	{
-		mStage->UpDate();
-		mUnit->Update();
-
-		int size;
-
-		size = mBoxes.size();
-		for (int i = 0; i < size; i++)
-		{
-			mBoxes[i]->Update();
-		}
-
-		size = mStorages.size();
-		for (int i = 0; i < size; i++)
-		{
-			mStorages[i]->Update();
-		}
-
-		//クリア判定
-		bool IsClear = true;
-		size = mBoxes.size();
-		for (int i = 0; i < size; i++)
-		{
-			//判定処理
-			if (mBoxes[i]->IsStayStorage() == false)
-			{
-				IsClear = false;
-				break;
-			}
-		}
-
-		if (IsClear == true)
-		{
-			if (mStageNo >= MAX_STAGE_NO)
-			{
-				//ゲームオーバー画面へ遷移
-				mSceneManager->ChangeScene(SCENE_ID::GAMEOVER, true);
-			}
-			else
-			{
-				mFader->SetFade(Fader::FADE_STATE::FADE_OUT);
-				mIsFading = true;
-			}
-
-		}
+	case GameScene::STATE::GAME:
+		UpdateGame();
+		break;
+	case GameScene::STATE::CLEAR:
+		UpdateClear();
+		break;
+	case GameScene::STATE::CHANGE_STATE:
+		UpdateChangeStage();
+		break;
 	}
-
-
 
 
 
@@ -135,6 +105,63 @@ void GameScene::Update(void)
 		mSceneManager->ChangeScene(SCENE_ID::GAMEOVER, true);
 	}
 
+}
+
+void GameScene::UpdateGame(void)
+{
+	mStage->UpDate();
+	mUnit->Update();
+
+	int size;
+
+	size = mBoxes.size();
+	for (int i = 0; i < size; i++)
+	{
+		mBoxes[i]->Update();
+	}
+
+	size = mStorages.size();
+	for (int i = 0; i < size; i++)
+	{
+		mStorages[i]->Update();
+	}
+
+	//クリア判定
+	bool IsClear = true;
+	size = mBoxes.size();
+	for (int i = 0; i < size; i++)
+	{
+		//判定処理
+		if (mBoxes[i]->IsStayStorage() == false)
+		{
+			IsClear = false;
+			break;
+		}
+	}
+
+	if (IsClear == true)
+	{
+		if (mStageNo >= MAX_STAGE_NO)
+		{
+			//ゲームオーバー画面へ遷移
+			mSceneManager->ChangeScene(SCENE_ID::GAMEOVER, true);
+		}
+		else
+		{
+			ChangeStage();
+			/*mFader->SetFade(Fader::FADE_STATE::FADE_OUT);
+			mIsFading = true;*/
+		}
+
+	}
+}
+
+void GameScene::UpdateClear(void)
+{
+}
+
+void GameScene::UpdateChangeStage(void)
+{
 }
 
 /// <summary>
@@ -149,9 +176,27 @@ void GameScene::Draw(void)
 	// 画面のクリア
 	ClearDrawScreen();
 
-	mStage->Render();
+	switch (mState)
+	{
+	case GameScene::STATE::GAME:
+		DrawGame();
+		break;
+	case GameScene::STATE::CLEAR:
+		DrawClear();
+		break;
+	case GameScene::STATE::CHANGE_STATE:
+		DrawChangeStage();
+		break;
+	}
 
+
+}
+
+void GameScene::DrawGame(void)
+{
 	int size;
+
+	mStage->Render();
 
 	size = mStorages.size();
 	for (int i = 0; i < size; i++)
@@ -166,9 +211,14 @@ void GameScene::Draw(void)
 	{
 		mBoxes[i]->Draw();
 	}
+}
 
+void GameScene::DrawClear(void)
+{
+}
 
-
+void GameScene::DrawChangeStage(void)
+{
 }
 
 /// <summary>
@@ -283,8 +333,20 @@ std::string GameScene::GetCsvPathGimmick(int stageNo)
 	return ret;
 }
 
-void GameScene::ChangeState(void)
+void GameScene::ChangeState(STATE state)
 {
+	mState = state;
+
+	switch (mState)
+	{
+	case GameScene::STATE::GAME:
+		break;
+	case GameScene::STATE::CLEAR:
+		
+		break;
+	case GameScene::STATE::CHANGE_STATE:
+		break;
+	}
 }
 
 void GameScene::ChangeStage(void)
@@ -409,7 +471,6 @@ void GameScene::LoadGimicData(void)
 			case 4:
 				
 				//荷物
-
 				tmpBox = new Box(this);
 				tmpBox->Init(Vector2{ x,y });
 				mBoxes.push_back(tmpBox);
@@ -417,14 +478,12 @@ void GameScene::LoadGimicData(void)
 
 			case 5:
 				//荷物置き
-
 				tmpStorage = new Storage(this);
 				tmpStorage->Init(Vector2{ x,y });
 				mStorages.push_back(tmpStorage);
 					break;
 
 			case 6:
-				
 				//操作キャラ
 				mUnit = new Unit(this);
 				mUnit->Init(Vector2{ x,y });
@@ -432,8 +491,6 @@ void GameScene::LoadGimicData(void)
 			}
 
 
-
-			//mMap[y][x] = stoi(strvec[x]);
 		}
 
 		int i = stoi(strvec[0]);

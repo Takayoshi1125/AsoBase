@@ -16,7 +16,7 @@ class GameScene : public SceneBase
 
 public:
 
-	static constexpr int MAX_STAGE_NO = 2;
+	static constexpr int MAX_STAGE_NO = 5;
 
 	//èÛë‘
 	enum class STATE
@@ -28,8 +28,17 @@ public:
 
 	GameScene(SceneManager* manager);
 	void Init(void) override;
+
 	void Update(void) override;
+	void UpdateGame(void);
+	void UpdateClear(void);
+	void UpdateChangeStage(void);
+
 	void Draw(void) override;
+	void DrawGame(void);
+	void DrawClear(void);
+	void DrawChangeStage(void);
+
 	void Release(void) override;
 
 	Stage* GetStage(void);
@@ -68,7 +77,7 @@ private:
 	//èÛë‘ä«óù
 	STATE mState;
 
-	void ChangeState(void);
+	void ChangeState(STATE state);
 
 	void ChangeStage(void);
 
