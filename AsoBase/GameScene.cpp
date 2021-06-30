@@ -6,6 +6,7 @@
 #include "KeyCheck.h"
 #include "GameCommon.h"
 #include "SceneManager.h"
+#include"TimeLimit.h"
 #include"Stage.h"
 #include"Unit.h"
 #include"Box.h"
@@ -28,15 +29,18 @@ void GameScene::Init(void)
 	mFader = new Fader();
 	mFader->Init();
 
-	mFader->SetFade(Fader::FADE_STATE::FADE_IN);
-	mIsFading = true;
 
 	mStage = new Stage(this);
 	mStage->Init(mStageNo);
 	
+	mTimelimit = new TimeLimit(mSceneManager);
+
+	mImageC = LoadGraph("Image/Congratulations.png", true);
 
 	//SetStage();
 	LoadGimicData();
+
+	mStepClear = 0.0f;
 
 }
 
@@ -49,11 +53,11 @@ void GameScene::Update(void)
 {
 	
 
-	//ミリ秒
-	float tickCount = GetTickCount64();
+	////ミリ秒
+	//float tickCount = GetTickCount64();
 
-	mDeltTime = (tickCount - mTickCount) / 1000.0f;
-	mTickCount = tickCount;
+	//mDeltTime = (tickCount - mTickCount) / 1000.0f;
+	//mTickCount = tickCount;
 
 	//mFader->Update();
 	//if (mIsFading)
@@ -80,10 +84,10 @@ void GameScene::Update(void)
 	//		break;
 	//	}
 	//}
-	/*else
-	{
-		
-	}*/
+	//else
+	//{
+	//	
+	//}
 
 	switch (mState)
 	{
@@ -93,7 +97,7 @@ void GameScene::Update(void)
 	case GameScene::STATE::CLEAR:
 		UpdateClear();
 		break;
-	case GameScene::STATE::CHANGE_STATE:
+	case GameScene::STATE::CHANGE_STAGE:
 		UpdateChangeStage();
 		break;
 	}
@@ -126,6 +130,12 @@ void GameScene::UpdateGame(void)
 		mStorages[i]->Update();
 	}
 
+	//時間制限
+	if(mTimelimit->IsTimeOver()==true)
+	{
+		mSceneManager->ChangeScene(SCENE_ID::GAMEOVER, true);
+	}
+
 	//クリア判定
 	bool IsClear = true;
 	size = mBoxes.size();
@@ -148,9 +158,11 @@ void GameScene::UpdateGame(void)
 		}
 		else
 		{
-			ChangeStage();
-			/*mFader->SetFade(Fader::FADE_STATE::FADE_OUT);
-			mIsFading = true;*/
+			//ChangeStage();
+			
+
+			ChangeState(STATE::CLEAR);
+			return;
 		}
 
 	}
@@ -158,10 +170,48 @@ void GameScene::UpdateGame(void)
 
 void GameScene::UpdateClear(void)
 {
+	mStepClear += mSceneManager->GetDeltaTime();
+	float t = mStepClear / TIME_CLEAR_MSG;
+
+	if (t >= 1.0f)
+	{
+		ChangeState(STATE::CHANGE_STAGE);
+		return;
+	}
+
 }
 
 void GameScene::UpdateChangeStage(void)
 {
+	mFader->Update();
+
+	auto state = mFader->GetState();
+
+	switch (state)
+	{
+	case Fader::FADE_STATE::FADE_OUT:
+		//暗くする
+		if (mFader->IsEnd() == true)
+		{
+			//ステージ切り替え
+			ChangeStage();
+			//徐々に明るくする
+			mFader->SetFade(Fader::FADE_STATE::FADE_IN);
+		}
+		break;
+	case Fader::FADE_STATE::FADE_IN:
+		//明るくする
+		if (mFader->IsEnd() == true)
+		{
+			mFader->SetFade(Fader::FADE_STATE::NONE);
+			ChangeState(STATE::GAME);
+		}
+		break;
+	}
+
+
+	/*ChangeStage();
+	ChangeState(STATE::GAME);*/
 }
 
 /// <summary>
@@ -184,7 +234,7 @@ void GameScene::Draw(void)
 	case GameScene::STATE::CLEAR:
 		DrawClear();
 		break;
-	case GameScene::STATE::CHANGE_STATE:
+	case GameScene::STATE::CHANGE_STAGE:
 		DrawChangeStage();
 		break;
 	}
@@ -215,10 +265,16 @@ void GameScene::DrawGame(void)
 
 void GameScene::DrawClear(void)
 {
+	int x = 500;
+	int y = 80;
+
+	DrawGame();
+	DrawGraph((SCREEN_SIZE_X - x) / 2, (SCREEN_SIZE_Y - y) / 2, mImageC, true);
 }
 
 void GameScene::DrawChangeStage(void)
 {
+	DrawGame();
 }
 
 /// <summary>
@@ -255,8 +311,11 @@ void GameScene::Release(void)
 		delete mStorages[i];
 	}
 
+
 	//動的配列のサイズを0に
 	mStorages.clear();
+
+	DeleteGraph(mImageC);
 
 }
 
@@ -342,9 +401,10 @@ void GameScene::ChangeState(STATE state)
 	case GameScene::STATE::GAME:
 		break;
 	case GameScene::STATE::CLEAR:
-		
+		mStepClear = 0.0f;
 		break;
-	case GameScene::STATE::CHANGE_STATE:
+	case GameScene::STATE::CHANGE_STAGE:
+		mFader->SetFade(Fader::FADE_STATE::FADE_OUT);
 		break;
 	}
 }
