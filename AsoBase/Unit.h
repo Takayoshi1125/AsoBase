@@ -25,7 +25,8 @@ public:
 	{
 		NONE,
 		IDLE,
-		MOVE
+		MOVE,
+		BACK_MOVE
 	};
 
 
@@ -38,6 +39,8 @@ public:
 	void Draw(void);
 	void Release(void);
 
+	//Šª‚«–ß‚µw¦
+	void BackMove(GameScene::History his);
 
 private:
 	SceneManager* mSceneManager;
@@ -71,6 +74,9 @@ private:
 
 	//‰Ÿ‚µo‚µ’†
 	bool mIsPushing;
+
+	//‘€ì‚ğ–ß‚·
+	GameScene::History mHistory;
 
 	//ó‘Ô‘JˆÚ
 	void ChangeState(STATE state);

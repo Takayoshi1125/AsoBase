@@ -1,6 +1,7 @@
 #include<vector>
 #include<string>
 #include<fstream>
+#include<stack>
 #include <DxLib.h>
 #include"Fader.h"
 #include "KeyCheck.h"
@@ -34,6 +35,7 @@ void GameScene::Init(void)
 	mStage->Init(mStageNo);
 	
 	mTimelimit = new TimeLimit(mSceneManager);
+	mTimelimit->Start(10.0f);
 
 	mImageC = LoadGraph("Image/Congratulations.png", true);
 
@@ -131,9 +133,11 @@ void GameScene::UpdateGame(void)
 	}
 
 	//ŽžŠÔ§ŒÀ
+	mTimelimit->Update();
 	if(mTimelimit->IsTimeOver()==true)
 	{
 		mSceneManager->ChangeScene(SCENE_ID::GAMEOVER, true);
+		return;
 	}
 
 	//ƒNƒŠƒA”»’è
@@ -261,6 +265,8 @@ void GameScene::DrawGame(void)
 	{
 		mBoxes[i]->Draw();
 	}
+
+	mTimelimit->Draw();
 }
 
 void GameScene::DrawClear(void)
@@ -390,6 +396,20 @@ std::string GameScene::GetCsvPathGimmick(int stageNo)
 	ret +=FILE_NAME_GIMMICK;
 
 	return ret;
+}
+
+void GameScene::RegistHistory(DIR dir, Vector2 pos, Box* box)
+{
+	Vector2 boxPos{ 0,0 };
+	if (box != nullptr)
+	{
+		boxPos = box->GetPos();
+	}
+
+	History his = { dir,pos,box,boxPos };
+
+	mHistoryBack.push(his);
+
 }
 
 void GameScene::ChangeState(STATE state)

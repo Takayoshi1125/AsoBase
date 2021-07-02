@@ -1,6 +1,7 @@
 #pragma once
 #include<vector>
 #include<string>
+#include<stack>
 #include"GameCommon.h"
 #include"Vector2.h"
 #include"SceneBase.h"
@@ -27,6 +28,15 @@ public:
 		GAME,
 		CLEAR,
 		CHANGE_STAGE
+	};
+
+	//Šª‚«–ß‚µ—p\‘¢‘Ì
+	struct History
+	{
+		DIR dir;
+		Vector2 unitPos;
+		Box* box;
+		Vector2 boxPos;
 	};
 
 	GameScene(SceneManager* manager);
@@ -59,6 +69,8 @@ public:
 
 	std::string GetCsvPathGimmick(int stageNo);
 
+	//‘€ì—š—ğ‚É“o˜^
+	void RegistHistory(DIR dir, Vector2 pos, Box* box);
 
 private:
 	Stage* mStage;
@@ -84,6 +96,9 @@ private:
 
 	//ó‘ÔŠÇ—
 	STATE mState;
+
+	//Šª‚«–ß‚µ
+	std::stack<History> mHistoryBack;
 
 	float mStepClear;
 

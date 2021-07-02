@@ -83,6 +83,7 @@ void Unit::Update(void)
 		break;
 
 	case Unit::STATE::MOVE:
+	case Unit::STATE::BACK_MOVE:
 	{
 		mStepMove += mSceneManager->GetDeltaTime();
 		float t = mStepMove / TIME_MOVE;
@@ -176,6 +177,12 @@ void Unit::Release(void)
 	}
 }
 
+void Unit::BackMove(GameScene::History his)
+{
+	mHistory = his;
+	ChangeState(STATE::BACK_MOVE);
+}
+
 void Unit::ChangeState(STATE state)
 {
 	//状態を変更
@@ -245,7 +252,42 @@ void Unit::ChangeState(STATE state)
 				//ユニットも移動しない
 				ChangeState(STATE::IDLE);
 			}
+
+
 		}
+		else
+		{
+			mIsPushing = false;
+		}
+
+		//移動情報確定
+		//---------------------
+
+		if (mIsPushing == true)
+		{
+			//荷物押し出し〇
+			mGameScene->RegistHistory(mDir, mMvSPos, box);
+		}
+		else
+		{
+			//荷物押し出し×
+			mGameScene->RegistHistory(mDir, mMvSPos, nullptr);
+		}
+		//------------------------
+
+
+		break;
+
+	case Unit::STATE::BACK_MOVE:
+		//経過時間を初期化
+		mStepMove = 0.0f;
+
+		//
+		mHistory;
+
+		mMvSPos;
+
+		mMvEPos;
 
 		break;
 	}
