@@ -183,12 +183,17 @@ void Unit::BackMove(GameScene::History his)
 	ChangeState(STATE::BACK_MOVE);
 }
 
+bool Unit::IsEnableBack(void)
+{
+	return mState==STATE::IDLE;
+}
+
 void Unit::ChangeState(STATE state)
 {
 	//状態を変更
 	mState = state;
 
-	
+
 
 	//状態ごとの初期処理
 	switch (mState)
@@ -225,26 +230,26 @@ void Unit::ChangeState(STATE state)
 		}
 
 		//
-		Vector2 mapPos = {mMvEPos.x / BLOCK_SIZE, mMvEPos.y / BLOCK_SIZE };
+		Vector2 mapPos = { mMvEPos.x / BLOCK_SIZE, mMvEPos.y / BLOCK_SIZE };
 
-		if (mGameScene->GetStage()->IsCollision(mapPos)==true)
+		if (mGameScene->GetStage()->IsCollision(mapPos) == true)
 		{
 			mIsPushing = true;
 			ChangeState(STATE::IDLE);
 			return;
 		}
 
-		Box* box=mGameScene->GetCollisionBox(mMvEPos);
+		Box* box = mGameScene->GetCollisionBox(mMvEPos);
 		if (box != nullptr)
 		{
 			//荷物が進行方向に移動できるかどうか
-			if (box->IsPossiblePush(mDir)==true)
+			if (box->IsPossiblePush(mDir) == true)
 			{
 				//ボックスに動く処理
 				mIsPushing = true;
 				box->Push(mDir);
 			}
-			else 
+			else
 			{
 				//ボックスに命令無
 				mIsPushing = true;
@@ -275,23 +280,26 @@ void Unit::ChangeState(STATE state)
 		}
 		//------------------------
 
-
+	}
 		break;
-
+	
 	case Unit::STATE::BACK_MOVE:
+	{
 		//経過時間を初期化
 		mStepMove = 0.0f;
 
 		//
-		mHistory;
+		//mHistory;
+		mDir = mHistory.dir;
 
-		mMvSPos;
+		mMvSPos=mMvEPos = mPos;
 
-		mMvEPos;
-
-		break;
+		mMvEPos = mHistory.unitPos;
 	}
+	break;
+
 	default:
 		break;
+
 	}
 }

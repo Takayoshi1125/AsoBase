@@ -38,6 +38,7 @@ void Box::Update(void)
 	case Box::STATE::IDLE:
 		break;
 	case Box::STATE::MOVE:
+	case Box::STATE::BACK_MOVE:
 	{
 		//経過時間を取得して、処理時間を計測
 		mStepMove += mSceneManager->GetDeltaTime();
@@ -311,6 +312,12 @@ bool Box::IsStayStorage(void)
 	return mIsStayStorage;
 }
 
+void Box::BackMove(GameScene::History his)
+{
+	mHistory = his;
+	ChangeState(STATE::BACK_MOVE);
+}
+
 
 void Box::ChangeState(STATE state)
 {
@@ -338,6 +345,7 @@ void Box::ChangeState(STATE state)
 		break; 
 	}
 	case Box::STATE::MOVE:
+	{
 		//線形補完による移動
 		//経過時間を初期化
 		mStepMove = 0.0f;
@@ -360,8 +368,24 @@ void Box::ChangeState(STATE state)
 			break;
 		case DIR::MAX:
 			break;
-		default:
-			break;
 		}
 	}
+	break;
+
+	case Box::STATE::BACK_MOVE:
+	{
+		//経過時間を初期化
+		mStepMove = 0.0f;
+
+		//
+		//mHistory;
+		mDir = mHistory.dir;
+
+		mMvSPos = mMvEPos = mPos;
+
+		mMvEPos = mHistory.boxPos;
+	}
+	break;
+	}
+
 }

@@ -1,5 +1,6 @@
 #pragma once
 #include"Vector2.h"
+#include"GameoverScene.h"
 class GameScene;
 class SceneManager;
 
@@ -16,7 +17,8 @@ public:
 	{
 		NONE,
 		IDLE,
-		MOVE
+		MOVE,
+		BACK_MOVE
 	};
 
 	Box(GameScene* scene);
@@ -37,6 +39,9 @@ public:
 	bool IsPossiblePush(DIR dir);
 
 	bool IsStayStorage(void);
+
+	//Šª‚«–ß‚µw¦
+	void BackMove(GameScene::History his);
 
 private:
 	SceneManager* mSceneManager;
@@ -63,6 +68,9 @@ private:
 
 	//‰×•¨’u‚«ê‚Ìã‚Éİ’u‚³‚ê‚Ä‚¢‚é‚©
 	bool mIsStayStorage;
+
+	//‘€ì‚ğ–ß‚·
+	GameScene::History mHistory;
 
 	//ó‘Ô‘JˆÚ
 	void ChangeState(STATE state);

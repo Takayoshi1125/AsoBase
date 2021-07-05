@@ -35,7 +35,7 @@ void GameScene::Init(void)
 	mStage->Init(mStageNo);
 	
 	mTimelimit = new TimeLimit(mSceneManager);
-	mTimelimit->Start(10.0f);
+	mTimelimit->Start(60.0f);
 
 	mImageC = LoadGraph("Image/Congratulations.png", true);
 
@@ -131,6 +131,34 @@ void GameScene::UpdateGame(void)
 	{
 		mStorages[i]->Update();
 	}
+
+	//操作を戻す(Nキー)
+	if (keyTrgDown[KEY_P1_A]
+		&&mHistoryBack.size()>0
+		&&mUnit->IsEnableBack())
+	{
+		//最後の操作履歴を取得
+		History his = mHistoryBack.top();
+
+		//何らかの条件をもとにboxに巻き戻し処理
+		//boxの巻き戻し処理実装
+
+		//最後の操作履歴をユニットに渡す
+		mUnit->BackMove(his);
+
+		if (his.box != nullptr)
+		{
+			size = mBoxes.size();
+			for (int i = 0; i < size; i++)
+			{
+
+				mBoxes[i]->BackMove(his);
+			}
+		}
+		//最後の操作履歴を削除
+		mHistoryBack.pop();
+	}
+
 
 	//時間制限
 	mTimelimit->Update();
@@ -405,6 +433,7 @@ void GameScene::RegistHistory(DIR dir, Vector2 pos, Box* box)
 	{
 		boxPos = box->GetPos();
 	}
+
 
 	History his = { dir,pos,box,boxPos };
 
