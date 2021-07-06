@@ -25,13 +25,18 @@ void TimeLimit::Update(void)
 void TimeLimit::Draw(void)
 {
 	int col = GetColor(0, 0, 0);
-	if(mLimitTime>5.0f)
+	if(mLimitTime>55.0f)
 	{
 		col = GetColor(0, 0, 0);
 	}
 	else
 	{
 		col= GetColor(255, 0, 0);
+
+		SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA,60);
+
+		SetDrawBlendMode(DX_BLENDGRAPHTYPE_NORMAL, 0);
+
 	}
 	DrawFormatStringF(0, 0, col, "%5.2f", mLimitTime);
 }

@@ -39,6 +39,11 @@ void GameScene::Init(void)
 
 	mImageC = LoadGraph("Image/Congratulations.png", true);
 
+	/*while (!mHistoryBack.empty())
+		mHistoryBack.pop();*/
+
+	//mHistoryBack = std::stack<History>();
+
 	//SetStage();
 	LoadGimicData();
 
@@ -132,29 +137,30 @@ void GameScene::UpdateGame(void)
 		mStorages[i]->Update();
 	}
 
+	//最後の操作履歴を取得
 	//操作を戻す(Nキー)
 	if (keyTrgDown[KEY_P1_A]
 		&&mHistoryBack.size()>0
 		&&mUnit->IsEnableBack())
 	{
-		//最後の操作履歴を取得
 		History his = mHistoryBack.top();
-
 		//何らかの条件をもとにboxに巻き戻し処理
 		//boxの巻き戻し処理実装
+
+
+		if (his.box != nullptr)
+		{
+			//size = mBoxes.size();
+			//for (int i = 0; i < size; i++)
+			{
+				his.box->BackMove(his);
+				//mBoxes[i]->BackMove(his);
+			}
+		}
 
 		//最後の操作履歴をユニットに渡す
 		mUnit->BackMove(his);
 
-		if (his.box != nullptr)
-		{
-			size = mBoxes.size();
-			for (int i = 0; i < size; i++)
-			{
-
-				mBoxes[i]->BackMove(his);
-			}
-		}
 		//最後の操作履歴を削除
 		mHistoryBack.pop();
 	}
@@ -192,7 +198,7 @@ void GameScene::UpdateGame(void)
 		{
 			//ChangeStage();
 			
-
+			
 			ChangeState(STATE::CLEAR);
 			return;
 		}
@@ -350,6 +356,16 @@ void GameScene::Release(void)
 	mStorages.clear();
 
 	DeleteGraph(mImageC);
+
+	while (!mHistoryBack.empty())
+	{
+		auto tmp = mHistoryBack.top;
+		tmp.Relese();
+		delete tmp;
+		mHistoryBack.pop();
+	}
+		
+
 
 }
 
