@@ -248,6 +248,7 @@ void Unit::ChangeState(STATE state)
 				//ボックスに動く処理
 				mIsPushing = true;
 				box->Push(mDir);
+				//mGameScene->PlusCntMove();
 			}
 			else
 			{
@@ -263,6 +264,7 @@ void Unit::ChangeState(STATE state)
 		else
 		{
 			mIsPushing = false;
+			//mGameScene->PlusCntMove();
 		}
 
 		//移動情報確定
@@ -272,11 +274,13 @@ void Unit::ChangeState(STATE state)
 		{
 			//荷物押し出し〇
 			mGameScene->RegistHistory(mDir, mMvSPos, box);
+			mGameScene->PlusCntMove();
 		}
 		else
 		{
 			//荷物押し出し×
 			mGameScene->RegistHistory(mDir, mMvSPos, nullptr);
+			mGameScene->PlusCntMove();
 		}
 		//------------------------
 
@@ -295,6 +299,8 @@ void Unit::ChangeState(STATE state)
 		mMvSPos=mMvEPos = mPos;
 
 		mMvEPos = mHistory.unitPos;
+
+		mGameScene->MinusCntMove();
 	}
 	break;
 

@@ -49,6 +49,8 @@ void GameScene::Init(void)
 
 	mStepClear = 0.0f;
 
+	mCntMove = 0;
+
 }
 
 /// <summary>
@@ -301,6 +303,8 @@ void GameScene::DrawGame(void)
 	}
 
 	mTimelimit->Draw();
+
+	DrawScore();
 }
 
 void GameScene::DrawClear(void)
@@ -315,6 +319,11 @@ void GameScene::DrawClear(void)
 void GameScene::DrawChangeStage(void)
 {
 	DrawGame();
+}
+
+void GameScene::DrawScore(void)
+{
+	DrawFormatString(100, 0, 0x000000, "%d", mCntMove);
 }
 
 /// <summary>
@@ -359,9 +368,9 @@ void GameScene::Release(void)
 
 	while (!mHistoryBack.empty())
 	{
-		auto tmp = mHistoryBack.top;
+		/*auto tmp = mHistoryBack.top;
 		tmp.Relese();
-		delete tmp;
+		delete tmp;*/
 		mHistoryBack.pop();
 	}
 		
@@ -455,6 +464,16 @@ void GameScene::RegistHistory(DIR dir, Vector2 pos, Box* box)
 
 	mHistoryBack.push(his);
 
+}
+
+void GameScene::PlusCntMove(void)
+{
+	mCntMove += 1;
+}
+
+void GameScene::MinusCntMove(void)
+{
+	mCntMove -= 1;
 }
 
 void GameScene::ChangeState(STATE state)

@@ -52,6 +52,8 @@ public:
 	void DrawClear(void);
 	void DrawChangeStage(void);
 
+	void DrawScore(void);
+
 	void Release(void) override;
 
 	Stage* GetStage(void);
@@ -67,10 +69,15 @@ public:
 	//ステージ構成パスを取得
 	std::string GetCsvPathGround(int stageNo);
 
+	//ギミック構成パスを取得
 	std::string GetCsvPathGimmick(int stageNo);
 
 	//操作履歴に登録
 	void RegistHistory(DIR dir, Vector2 pos, Box* box);
+
+	void PlusCntMove(void);
+
+	void MinusCntMove(void);
 
 private:
 	Stage* mStage;
@@ -101,6 +108,12 @@ private:
 	std::stack<History> mHistoryBack;
 
 	float mStepClear;
+
+	//移動歩数
+	int mCntMove;
+
+	//現在のステージのBestスコア
+	int mBestScore;
 
 	void ChangeState(STATE state);
 
