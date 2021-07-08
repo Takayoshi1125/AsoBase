@@ -36,6 +36,11 @@ void TimeLimit::Draw(void)
 	{
 		col= GetColor(255, 0, 0);
 
+		DrawBox(0, 20, SCREEN_SIZE_X, 60, 0x00ffff, true);
+
+		//SetFontSize(30);
+		//DrawString(0, 20, "WARNING", 0x000000);
+
 		//ƒTƒCƒŒƒ“
 		float alpha = (sin(time*5.0f)+1.0f)*0.5f;
 		alpha = alpha * 130.0f;
