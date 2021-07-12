@@ -19,6 +19,7 @@
 #define FILE_PATH_CSV "StageData/Stage"
 #define FILE_NAME_GIMMICK "GimmickChip.csv"
 #define FILE_NAME_GROUND "GroundChip.csv"
+#define FILE_NAME_SCORE "Score.csv"
 
 // •ûŒü
 enum class DIR

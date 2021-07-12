@@ -2,6 +2,7 @@
 #include<vector>
 #include<string>
 #include<stack>
+#include<map>
 #include"GameCommon.h"
 #include"Vector2.h"
 #include"SceneBase.h"
@@ -72,6 +73,8 @@ public:
 	//ギミック構成パスを取得
 	std::string GetCsvPathGimmick(int stageNo);
 
+	std::string GetCsvPathScore(void);
+
 	//操作履歴に登録
 	void RegistHistory(DIR dir, Vector2 pos, Box* box);
 
@@ -115,6 +118,9 @@ private:
 	//現在のステージのBestスコア
 	int mBestScore;
 
+	//ステージごとのBestScore
+	std::map<int, int>mBestScores;
+
 	void ChangeState(STATE state);
 
 	void ChangeStage(void);
@@ -122,5 +128,10 @@ private:
 	void SetStage(void);
 
 	void LoadGimicData(void);
+
+	void LoadScore(void);
+
+	//現在のステージのBestScoreを取得
+	int GetBestScore(void);
 
 };

@@ -46,10 +46,13 @@ void GameScene::Init(void)
 
 	//SetStage();
 	LoadGimicData();
+	LoadScore();
 
 	mStepClear = 0.0f;
 
 	mCntMove = 0;
+
+	mBestScore = 6;
 
 }
 
@@ -61,42 +64,6 @@ void GameScene::Init(void)
 void GameScene::Update(void)
 {
 	
-
-	////ミリ秒
-	//float tickCount = GetTickCount64();
-
-	//mDeltTime = (tickCount - mTickCount) / 1000.0f;
-	//mTickCount = tickCount;
-
-	//mFader->Update();
-	//if (mIsFading)
-	//{
-	//	Fader::FADE_STATE fState = mFader->GetState();
-	//	switch (fState)
-	//	{
-	//	case Fader::FADE_STATE::FADE_IN:
-	//		if (mFader->IsEnd())
-	//		{
-	//			mFader->SetFade(Fader::FADE_STATE::NONE);
-	//			mIsFading = false;
-	//			//ChangeStage();
-	//		}
-	//		break;
-	//	case Fader::FADE_STATE::FADE_OUT:
-	//		if (mFader->IsEnd())
-	//		{
-	//			//mFader->SetFade(Fader::FADE_STATE::FADE_IN);
-	//			ChangeStage();
-	//		}
-	//		break;
-	//	default:
-	//		break;
-	//	}
-	//}
-	//else
-	//{
-	//	
-	//}
 
 	switch (mState)
 	{
@@ -323,6 +290,25 @@ void GameScene::DrawChangeStage(void)
 
 void GameScene::DrawScore(void)
 {
+	int x1 = 0;
+	int x2 = 0;
+	int y2 = 60;
+	int width = 100;
+	int charX;
+	int charY=20;
+
+	x1 = 300;
+	x2 = x1 + width;
+
+	DrawBox(x1, 10, x1 + width, y2, 0xffffff, true);
+
+	charX = ((x1 + x2) / 2) - 10;
+	SetFontSize(32);
+
+	SetFontSize(20);
+
+	DrawFormatString(300, 0, 0x000000, "%d", mBestScore);
+
 	DrawFormatString(100, 0, 0x000000, "%d", mCntMove);
 }
 
@@ -447,6 +433,16 @@ std::string GameScene::GetCsvPathGimmick(int stageNo)
 	ret += std::to_string(stageNo);
 	ret += "/";
 	ret +=FILE_NAME_GIMMICK;
+
+	return ret;
+}
+
+std::string GameScene::GetCsvPathScore()
+{
+	std::string ret = "";
+
+	ret += "StageData/";
+	ret += FILE_NAME_SCORE;
 
 	return ret;
 }
@@ -645,6 +641,48 @@ void GameScene::LoadGimicData(void)
 
 	if (true) {}
 
+}
+
+void GameScene::LoadScore(void)
+{
+	//ファイルパス取得
+	std::string filePath = GetCsvPathScore();
+
+	//ファイルを読み込む
+	std::ifstream ifs(filePath);
+
+	//1行ずつ読み込む
+	std::string line;
+	while (getline(ifs, line))
+	{
+		//Yで分割されたline
+
+		std::vector<std::string>strvec =
+			Utility::Split(line, ',');
+
+
+		int stageNo = stoi(strvec[0]);
+		int bestScore = stoi(strvec[1]);
+		mBestScores.emplace(stageNo, bestScore);
+
+		//int i = stoi(strvec[0]);
+
+
+	}
+
+
+
+}
+
+int GameScene::GetBestScore(void)
+{
+	//現在のステージ
+	mStageNo;
+	//ステージごとのベストスコア
+	mBestScores;
+
+	//現在のステージのベストスコア
+	return 0;
 }
 
 
