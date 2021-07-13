@@ -131,6 +131,8 @@ private:
 
 	void LoadScore(void);
 
+
+	void SaveScore(void);
 	//現在のステージのBestScoreを取得
 	int GetBestScore(void);
 

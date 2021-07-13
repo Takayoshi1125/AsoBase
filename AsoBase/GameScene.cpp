@@ -180,6 +180,7 @@ void GameScene::UpdateClear(void)
 	mStepClear += mSceneManager->GetDeltaTime();
 	float t = mStepClear / TIME_CLEAR_MSG;
 
+
 	if (t >= 1.0f)
 	{
 		ChangeState(STATE::CHANGE_STAGE);
@@ -482,6 +483,10 @@ void GameScene::ChangeState(STATE state)
 		break;
 	case GameScene::STATE::CLEAR:
 		mStepClear = 0.0f;
+		if (mCntMove > mBestScore)
+		{
+			SaveScore();
+		}
 		break;
 	case GameScene::STATE::CHANGE_STAGE:
 		mFader->SetFade(Fader::FADE_STATE::FADE_OUT);
@@ -674,15 +679,53 @@ void GameScene::LoadScore(void)
 
 }
 
+void GameScene::SaveScore(void)
+{
+	//何処で呼び出す
+	//BestScore>ステージクリア時のスコア
+	if (0 < mBestScores.count(mStageNo))
+	{
+		mBestScores[mStageNo] = mCntMove;
+	}
+	else
+	{
+		//mapの中にkeyがない場合
+		mBestScores.emplace(mStageNo, mCntMove);
+	}
+
+	//ファイルパス取得
+	std::string filePath = GetCsvPathScore();
+
+	std::ofstream ofs = std::ofstream(filePath);
+
+	std::string line;
+	for (std::pair<int, int>p : mBestScores)
+	{
+		line = "";
+		line += std::to_string(p.first);
+		line += ",";
+		line += std::to_string(p.second);
+		ofs << line << std::endl;
+	}
+
+	ofs.close();
+
+}
+
 int GameScene::GetBestScore(void)
 {
-	//現在のステージ
-	mStageNo;
-	//ステージごとのベストスコア
-	mBestScores;
+	int ret = 999;
+
+
+	if (0 < mBestScores.count(mStageNo))
+	{
+		std::map<int, int>::iterator it = mBestScores.find(mStageNo);
+		ret = it->second;
+	}
+
+	return ret;
 
 	//現在のステージのベストスコア
-	return 0;
 }
 
 
