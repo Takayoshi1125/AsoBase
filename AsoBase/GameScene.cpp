@@ -3,6 +3,7 @@
 #include<fstream>
 #include<stack>
 #include <DxLib.h>
+#include"Vector2.h"
 #include"Fader.h"
 #include "KeyCheck.h"
 #include "GameCommon.h"
@@ -13,11 +14,25 @@
 #include"Box.h"
 #include"Storage.h"
 #include"Utility.h"
+#include"PopupUIBase.h"
 #include "GameScene.h"
 
 GameScene::GameScene(SceneManager* manager) : SceneBase(manager)
 {
 	mStageNo = 1;
+
+	mFader = new Fader();
+	mFader->Init();
+
+
+	mStage = new Stage(this);
+	mStage->Init(mStageNo);
+
+	mTimelimit = new TimeLimit(mSceneManager);
+	mTimelimit->Start(60.0f);
+
+	mPopupUIBase = new PopupUIBase(this);
+	mPopupUIBase->Init(Vector2(100,100));
 }
 
 /// <summary>
@@ -27,15 +42,7 @@ GameScene::GameScene(SceneManager* manager) : SceneBase(manager)
 /// <returns></returns>
 void GameScene::Init(void)
 {
-	mFader = new Fader();
-	mFader->Init();
-
-
-	mStage = new Stage(this);
-	mStage->Init(mStageNo);
 	
-	mTimelimit = new TimeLimit(mSceneManager);
-	mTimelimit->Start(60.0f);
 
 	mImageC = LoadGraph("Image/Congratulations.png", true);
 
@@ -89,6 +96,26 @@ void GameScene::Update(void)
 
 void GameScene::UpdateGame(void)
 {
+
+	//
+	if (mPopupUIBase->IsOpen() == true)
+	{
+		mPopupUIBase->Update();
+		if (keyTrgDown[KEY_P1_B])
+		{
+			mPopupUIBase->Close();
+		}
+		//ˆ—’†’f
+		return;
+	}
+	else
+	{
+		if (keyTrgDown[KEY_P1_B])
+		{
+			mPopupUIBase->Open();
+		}
+	}
+
 	mStage->UpDate();
 	mUnit->Update();
 
@@ -273,6 +300,12 @@ void GameScene::DrawGame(void)
 	mTimelimit->Draw();
 
 	DrawScore();
+
+	//ƒƒjƒ…[ŠJ‚©‚ê‚Ä‚¢‚é‚È‚ç
+	if (mPopupUIBase->IsOpen() == true)
+	{
+		mPopupUIBase->Draw();
+	}
 }
 
 void GameScene::DrawClear(void)

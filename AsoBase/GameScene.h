@@ -13,6 +13,7 @@ class Stage;
 class Unit;
 class Box;
 class Storage;
+class PopupUIBase;
 
 class GameScene : public SceneBase
 {
@@ -121,7 +122,12 @@ private:
 	//ステージごとのBestScore
 	std::map<int, int>mBestScores;
 
+
 	void ChangeState(STATE state);
+
+	//メニューUI
+	PopupUIBase* mPopupUIBase;
+
 
 	void ChangeStage(void);
 
