@@ -12,7 +12,7 @@ public:
 	//画面描画時の調整値
 	static constexpr int MARGIN_CHOICE_X = 30;
 	static constexpr int MARGIN_CHOICE_Y = 5;
-	static constexpr int MARGIN_CHOICE_HEIGHT = 5;
+	static constexpr int MARGIN_CHOICE_HEIGHT = 15;
 
 	static constexpr int MARGIN_SELECT_X = 5;
 
@@ -31,7 +31,7 @@ public:
 	//メニューが開いているか
 	bool IsOpen(void);
 
-private:
+protected:
 
 	GameScene* mGameScene;
 
@@ -42,9 +42,9 @@ private:
 	bool mIsOpene;
 
 	//メニューの選択肢
-	std::vector<std::string>mChoice;
+	std::vector<std::string>mChoices;
 
 	//選択No
-	int mSelectMo;
+	int mSelectNo;
 };
 

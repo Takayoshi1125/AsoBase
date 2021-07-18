@@ -171,10 +171,12 @@
     <ClCompile Include="SceneBase.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Stage.cpp" />
+    <ClCompile Include="StageSelectMenuUI.cpp" />
     <ClCompile Include="Storage.cpp" />
     <ClCompile Include="TestPlayer.cpp" />
     <ClCompile Include="TimeLimit.cpp" />
     <ClCompile Include="TitleScene.cpp" />
+    <ClCompile Include="TopMenuUI.cpp" />
     <ClCompile Include="Unit.cpp" />
     <ClCompile Include="Utility.cpp" />
     <ClCompile Include="Vector2.cpp" />
@@ -194,10 +196,12 @@
     <ClInclude Include="SceneBase.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Stage.h" />
+    <ClInclude Include="StageSelectMenuUI.h" />
     <ClInclude Include="Storage.h" />
     <ClInclude Include="TestPlayer.h" />
     <ClInclude Include="TimeLimit.h" />
     <ClInclude Include="TitleScene.h" />
+    <ClInclude Include="TopMenuUI.h" />
     <ClInclude Include="Unit.h" />
     <ClInclude Include="Utility.h" />
     <ClInclude Include="Vector2.h" />

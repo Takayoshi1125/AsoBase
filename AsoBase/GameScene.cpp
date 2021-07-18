@@ -15,6 +15,7 @@
 #include"Storage.h"
 #include"Utility.h"
 #include"PopupUIBase.h"
+#include"TopMenuUI.h"
 #include "GameScene.h"
 
 GameScene::GameScene(SceneManager* manager) : SceneBase(manager)
@@ -31,7 +32,8 @@ GameScene::GameScene(SceneManager* manager) : SceneBase(manager)
 	mTimelimit = new TimeLimit(mSceneManager);
 	mTimelimit->Start(60.0f);
 
-	mPopupUIBase = new PopupUIBase(this);
+	//mPopupUIBase = new PopupUIBase(this);
+	mPopupUIBase = new TopMenuUI(this);
 	mPopupUIBase->Init(Vector2(100,100));
 }
 
