@@ -83,6 +83,10 @@ public:
 
 	void MinusCntMove(void);
 
+	void ChangeSelectStage(int stageNo);
+
+	std::map<int, int>GetBestScores(void);
+
 private:
 	Stage* mStage;
 	Unit* mUnit;

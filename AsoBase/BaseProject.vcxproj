@@ -165,6 +165,7 @@
     <ClCompile Include="GameCommon.cpp" />
     <ClCompile Include="GameoverScene.cpp" />
     <ClCompile Include="GameScene.cpp" />
+    <ClCompile Include="HighScoreMenuUI.cpp" />
     <ClCompile Include="KeyCheck.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PopupUIBase.cpp" />
@@ -190,6 +191,7 @@
     <ClInclude Include="GameCommon.h" />
     <ClInclude Include="GameoverScene.h" />
     <ClInclude Include="GameScene.h" />
+    <ClInclude Include="HighScoreMenuUI.h" />
     <ClInclude Include="KeyCheck.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="PopupUIBase.h" />

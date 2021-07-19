@@ -1,8 +1,8 @@
 #pragma once
-#include"Vector2.h"
 #include"PopupUIBase.h"
 class GameScene;
 class StageSelectMenuUI;
+class HighScoreMenuUI;
 
 class TopMenuUI :public PopupUIBase
 {
@@ -17,6 +17,7 @@ public:
 private:
 
 	StageSelectMenuUI* mStageSelectMenuUI;
+	HighScoreMenuUI* mHighScoreMenuUI;
 
 };
 

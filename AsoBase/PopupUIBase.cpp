@@ -17,15 +17,20 @@ void PopupUIBase::Init(Vector2 pos)
 
 	//‰¼:€–Ú‚ðì‚é
 	mChoices.clear();
-	mChoices.push_back("aaa");
+	/*mChoices.push_back("aaa");
 	mChoices.push_back("“ñ”Ô–Ú");
-	mChoices.push_back("3”Ô–Ú");
+	mChoices.push_back("3”Ô–Ú");*/
 
 
 }
 
 void PopupUIBase::Update(void)
 {
+	if (keyTrgDown[KEY_P1_B])
+	{
+		Close();
+	}
+
 	int size = mChoices.size();
 	if (size > 0)
 	{
@@ -50,6 +55,8 @@ void PopupUIBase::Update(void)
 				mSelectNo = (size - 1);
 			}
 		}
+
+
 	}
 }
 

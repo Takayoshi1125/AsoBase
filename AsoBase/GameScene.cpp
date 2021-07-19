@@ -20,17 +20,16 @@
 
 GameScene::GameScene(SceneManager* manager) : SceneBase(manager)
 {
+	mSceneManager = manager;
 	mStageNo = 1;
+
+	ChangeState(STATE::GAME);
 
 	mFader = new Fader();
 	mFader->Init();
 
 
-	mStage = new Stage(this);
-	mStage->Init(mStageNo);
-
 	mTimelimit = new TimeLimit(mSceneManager);
-	mTimelimit->Start(60.0f);
 
 	//mPopupUIBase = new PopupUIBase(this);
 	mPopupUIBase = new TopMenuUI(this);
@@ -45,7 +44,6 @@ GameScene::GameScene(SceneManager* manager) : SceneBase(manager)
 void GameScene::Init(void)
 {
 	
-
 	mImageC = LoadGraph("Image/Congratulations.png", true);
 
 	/*while (!mHistoryBack.empty())
@@ -53,15 +51,19 @@ void GameScene::Init(void)
 
 	//mHistoryBack = std::stack<History>();
 
+	mStage = new Stage(this);
+	mStage->Init(mStageNo);
 	//SetStage();
 	LoadGimicData();
 	LoadScore();
 
+	GetBestScore();
+
+	mTimelimit->Start(60.0f);
+
 	mStepClear = 0.0f;
-
 	mCntMove = 0;
-
-	mBestScore = 6;
+	mBestScore = 0;
 
 }
 
@@ -103,10 +105,6 @@ void GameScene::UpdateGame(void)
 	if (mPopupUIBase->IsOpen() == true)
 	{
 		mPopupUIBase->Update();
-		if (keyTrgDown[KEY_P1_B])
-		{
-			mPopupUIBase->Close();
-		}
 		//処理中断
 		return;
 	}
@@ -222,6 +220,7 @@ void GameScene::UpdateChangeStage(void)
 {
 	mFader->Update();
 
+	//Fader::FADE_STATE state = mFader->GetState();
 	auto state = mFader->GetState();
 
 	switch (state)
@@ -361,7 +360,7 @@ void GameScene::Release(void)
 	mUnit->Release();
 	delete mUnit;
 
-	delete mFader;
+	//delete mFader;
 
 	int size;
 
@@ -508,6 +507,19 @@ void GameScene::MinusCntMove(void)
 	mCntMove -= 1;
 }
 
+void GameScene::ChangeSelectStage(int stageNo)
+{
+	mStageNo = stageNo-1;
+	mPopupUIBase->Close();
+	ChangeState(STATE::CHANGE_STAGE);
+
+}
+
+std::map<int, int> GameScene::GetBestScores(void)
+{
+	return mBestScores;
+}
+
 void GameScene::ChangeState(STATE state)
 {
 	mState = state;
@@ -546,15 +558,15 @@ void GameScene::SetStage(void)
 	//荷物置き
 	Storage* tmpStorage;
 
-	switch (mStageNo)
+	/*switch (mStageNo)
 	{
 	case 1:
 	{
-		//操作キャラ
+		操作キャラ
 		mUnit = new Unit(this);
 		mUnit->Init(Vector2{ 10,10 });
 
-		//荷物
+		荷物
 
 		tmpBox = new Box(this);
 		tmpBox->Init(Vector2{ 12,12 });
@@ -564,7 +576,7 @@ void GameScene::SetStage(void)
 		tmpBox->Init(Vector2{ 11,11 });
 		mBoxes.push_back(tmpBox);
 
-		//荷物置き
+		荷物置き
 		
 		tmpStorage = new Storage(this);
 		tmpStorage->Init(Vector2{ 11,7 });
@@ -578,11 +590,11 @@ void GameScene::SetStage(void)
 
 	case 2:
 	{
-		//操作キャラ
+		操作キャラ
 		mUnit = new Unit(this);
 		mUnit->Init(Vector2{ 10,10 });
 
-		//荷物
+		荷物
 		tmpBox = new Box(this);
 		tmpBox->Init(Vector2{ 12,12 });
 		mBoxes.push_back(tmpBox);
@@ -595,7 +607,7 @@ void GameScene::SetStage(void)
 		tmpBox->Init(Vector2{ 17,8 });
 		mBoxes.push_back(tmpBox);
 
-		//荷物置き
+		荷物置き
 		tmpStorage = new Storage(this);
 		tmpStorage->Init(Vector2{ 17,10 });
 		mStorages.push_back(tmpStorage);
@@ -609,7 +621,7 @@ void GameScene::SetStage(void)
 		mStorages.push_back(tmpStorage);
 	}
 	break;
-	}
+	}*/
 
 	
 }
@@ -742,7 +754,6 @@ void GameScene::SaveScore(void)
 		line += std::to_string(p.second);
 		ofs << line << std::endl;
 	}
-
 	ofs.close();
 
 }
