@@ -11,7 +11,7 @@ PopupUIBase::PopupUIBase(GameScene* scene)
 void PopupUIBase::Init(Vector2 pos)
 {
 	mPos = pos;
-	mSize = { 100,200 };
+	mSize = { 180,200 };
 	mSelectNo = 0;
 	mIsOpene = false;
 
