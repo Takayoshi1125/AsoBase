@@ -62,7 +62,7 @@ void PopupUIBase::Update(void)
 
 void PopupUIBase::Draw(void)
 {
-	//’†‚ÌŽ‘Ši
+	//’†‚ÌŽlŠp
 	DrawBox(mPos.x, mPos.y,
 		mPos.x + mSize.x, mPos.y + mSize.y,
 		0x000000, true);

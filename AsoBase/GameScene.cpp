@@ -20,7 +20,6 @@
 
 GameScene::GameScene(SceneManager* manager) : SceneBase(manager)
 {
-	mSceneManager = manager;
 	mStageNo = 1;
 
 	ChangeState(STATE::GAME);
@@ -44,7 +43,7 @@ GameScene::GameScene(SceneManager* manager) : SceneBase(manager)
 void GameScene::Init(void)
 {
 	
-	mImageC = LoadGraph("Image/Congratulations.png", true);
+	mImageC = LoadGraph("Image/Congratulations.png");
 
 	/*while (!mHistoryBack.empty())
 		mHistoryBack.pop();*/
@@ -57,13 +56,12 @@ void GameScene::Init(void)
 	LoadGimicData();
 	LoadScore();
 
-	GetBestScore();
+	mBestScore =GetBestScore();
+	mStepClear = 0.0f;
 
 	mTimelimit->Start(60.0f);
 
-	mStepClear = 0.0f;
 	mCntMove = 0;
-	mBestScore = 0;
 
 }
 
@@ -395,8 +393,6 @@ void GameScene::Release(void)
 		mHistoryBack.pop();
 	}
 		
-
-
 }
 
 Stage* GameScene::GetStage(void)
@@ -762,6 +758,7 @@ int GameScene::GetBestScore(void)
 {
 	int ret = 999;
 
+	mBestScores.size();
 
 	if (0 < mBestScores.count(mStageNo))
 	{
@@ -769,9 +766,9 @@ int GameScene::GetBestScore(void)
 		ret = it->second;
 	}
 
+	//現在のステージのベストスコア
 	return ret;
 
-	//現在のステージのベストスコア
 }
 
 
