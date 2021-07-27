@@ -25,18 +25,19 @@ void TimeLimit::Update(void)
 
 void TimeLimit::Draw(void)
 {
-	float time = mLimitTime;
-	int col = GetColor(0, 0, 0);
-	
-	if(mLimitTime>55.0f)
-	{
-		col = GetColor(0, 0, 0);
-	}
-	else
-	{
-		col= GetColor(255, 0, 0);
+	int x2 = SCREEN_SIZE_X - BLOCK_SIZE;
+	int width = 200;
 
-		DrawBox(0, 20, SCREEN_SIZE_X, 60, 0x00ffff, true);
+	DrawBox(x2 - width, 10, x2, 60, 0x000000, true);
+
+	float time = mLimitTime;
+	int col = GetColor(30, 144, 255);
+	
+	if(mLimitTime<30.0f)
+	{
+		//col= GetColor(255, 0, 0);
+
+		//DrawBox(0, 20, SCREEN_SIZE_X, 60, 0x00ffff, true);
 
 		//SetFontSize(30);
 		//DrawString(0, 20, "WARNING", 0x000000);
@@ -51,7 +52,8 @@ void TimeLimit::Draw(void)
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 	}
-	DrawFormatStringF(0, 0, col, "%5.2f", mLimitTime);
+	SetFontSize(32);
+	DrawFormatStringF(850, 20, col, "%5.2f", mLimitTime);
 }
 
 bool TimeLimit::IsTimeOver(void)

@@ -36,4 +36,5 @@ void StageSelectMenuUI::Update(void)
 void StageSelectMenuUI::Draw(void)
 {
 	PopupUIBase::Draw();
+
 }

@@ -29,7 +29,7 @@ void Stage::UpDate(void)
 {
 }
 
-void Stage::Render(void)
+void Stage::Draw(void)
 {
 	for (int y = 0; y < SCREEN_SIZE_Y / BLOCK_SIZE; y++)
 	{

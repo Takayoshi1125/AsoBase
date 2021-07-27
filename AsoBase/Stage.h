@@ -11,7 +11,7 @@ public:
 
 	void Init(int stageNo);
 	void UpDate(void);
-	void Render(void);
+	void Draw(void);
 	void Release(void);
 
 	//Õ“Ë”»’è

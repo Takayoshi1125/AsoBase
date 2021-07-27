@@ -59,7 +59,7 @@ void GameScene::Init(void)
 	mBestScore =GetBestScore();
 	mStepClear = 0.0f;
 
-	mTimelimit->Start(60.0f);
+	mTimelimit->Start(100.0f);
 
 	mCntMove = 0;
 
@@ -186,6 +186,10 @@ void GameScene::UpdateGame(void)
 		if (mStageNo >= MAX_STAGE_NO)
 		{
 			//ゲームオーバー画面へ遷移
+			if (mCntMove < mBestScore)
+			{
+				SaveScore();
+			}
 			mSceneManager->ChangeScene(SCENE_ID::GAMEOVER, true);
 		}
 		else
@@ -278,9 +282,13 @@ void GameScene::Draw(void)
 
 void GameScene::DrawGame(void)
 {
+
 	int size;
 
-	mStage->Render();
+	mStage->Draw();
+
+	SetFontSize(32);
+	DrawFormatString(0, 0, 0x000000, "ステージ%d", mStageNo, true);
 
 	size = mStorages.size();
 	for (int i = 0; i < size; i++)
@@ -325,24 +333,34 @@ void GameScene::DrawScore(void)
 {
 	int x1 = 0;
 	int x2 = 0;
+	int y1 = 10;
 	int y2 = 60;
 	int width = 100;
 	int charX;
 	int charY=20;
 
+	//ベストスコア
 	x1 = 300;
 	x2 = x1 + width;
 
-	DrawBox(x1, 10, x1 + width, y2, 0xffffff, true);
+	DrawBox(x1, y1, x1 + width, y2, 0x000000, true);
 
 	charX = ((x1 + x2) / 2) - 10;
 	SetFontSize(32);
 
+	DrawFormatString(charX, charY, 0xffffff, "%d", mBestScore);
+
 	SetFontSize(20);
+	DrawString(x1, y1, "Best", 0x00bfff);
 
-	DrawFormatString(300, 0, 0x000000, "%d", mBestScore);
+	//現在のスコア
+	x1 += width + 20;
+	x2 = x1 + width;
+	DrawBox(x1, y1, x1 + width, y2, 0x000000, true);
 
-	DrawFormatString(100, 0, 0x000000, "%d", mCntMove);
+	charX = ((x1 + x2) / 2) - 10;
+	SetFontSize(32);
+	DrawFormatString(charX, charY, 0xffffff, "%d", mCntMove);
 }
 
 /// <summary>
@@ -526,7 +544,7 @@ void GameScene::ChangeState(STATE state)
 		break;
 	case GameScene::STATE::CLEAR:
 		mStepClear = 0.0f;
-		if (mCntMove > mBestScore)
+		if (mCntMove < mBestScore)
 		{
 			SaveScore();
 		}
@@ -757,8 +775,6 @@ void GameScene::SaveScore(void)
 int GameScene::GetBestScore(void)
 {
 	int ret = 999;
-
-	mBestScores.size();
 
 	if (0 < mBestScores.count(mStageNo))
 	{
