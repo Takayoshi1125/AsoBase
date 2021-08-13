@@ -108,6 +108,7 @@ private:
 	std::vector<Storage*>mStorages;
 
 	int mStageNo;
+	int mSNo2;
 
 	//ó‘ÔŠÇ—
 	STATE mState;

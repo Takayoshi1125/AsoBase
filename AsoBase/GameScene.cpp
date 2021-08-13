@@ -61,6 +61,8 @@ void GameScene::Init(void)
 
 	mTimelimit->Start(100.0f);
 
+	mSNo2 = mStageNo;
+
 	mCntMove = 0;
 
 }
@@ -288,7 +290,7 @@ void GameScene::DrawGame(void)
 	mStage->Draw();
 
 	SetFontSize(32);
-	DrawFormatString(0, 0, 0x000000, "ステージ%d", mStageNo, true);
+	DrawFormatString(0, 0, 0x000000, "ステージ%d", mSNo2, true);
 
 	size = mStorages.size();
 	for (int i = 0; i < size; i++)
